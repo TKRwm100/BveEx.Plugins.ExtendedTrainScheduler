@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 using BveTypes.ClassWrappers;
 
-using AtsEx.Extensions.MapStatements;
-using AtsEx.PluginHost.MapStatements;
+using BveEx.Extensions.MapStatements;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler
+namespace Automatic9045.BveEx.ExtendedTrainScheduler
 {
     internal class Validator
     {

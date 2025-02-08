@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler
+namespace Automatic9045.BveEx.ExtendedTrainScheduler
 {
     internal abstract class ScheduleBase<T>
     {

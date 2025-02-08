@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using AtsEx.Extensions.MapStatements;
+using BveEx.Extensions.MapStatements;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler
+namespace Automatic9045.BveEx.ExtendedTrainScheduler
 {
     /// <summary>
     /// BVE 本体互換の <see cref="TimeSpan"/> 生成ロジックを提供します。

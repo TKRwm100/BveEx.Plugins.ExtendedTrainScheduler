@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 using BveTypes.ClassWrappers;
 
-using AtsEx.Extensions.MapStatements;
-using AtsEx.Extensions.PreTrainPatch;
+using BveEx.Extensions.MapStatements;
+using BveEx.Extensions.PreTrainPatch;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler.PreTrains
+namespace Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains
 {
     internal class PreTrainOperator : IPreTrainLocationConverter
     {

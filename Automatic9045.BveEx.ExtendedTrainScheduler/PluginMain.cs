@@ -11,17 +11,17 @@ using FastMember;
 using ObjectiveHarmonyPatch;
 using TypeWrapping;
 
-using AtsEx.Extensions.MapStatements;
-using AtsEx.Extensions.PreTrainPatch;
-using AtsEx.PluginHost;
-using AtsEx.PluginHost.Plugins;
-using AtsEx.PluginHost.Plugins.Extensions;
+using BveEx.Extensions.MapStatements;
+using BveEx.Extensions.PreTrainPatch;
+using BveEx.PluginHost;
+using BveEx.PluginHost.Plugins;
+using BveEx.PluginHost.Plugins.Extensions;
 
-using Automatic9045.AtsEx.ExtendedTrainScheduler.PreTrains;
-using Automatic9045.AtsEx.ExtendedTrainScheduler.Speed;
-using Automatic9045.AtsEx.ExtendedTrainScheduler.Tracks;
+using Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains;
+using Automatic9045.BveEx.ExtendedTrainScheduler.Speed;
+using Automatic9045.BveEx.ExtendedTrainScheduler.Tracks;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler
+namespace Automatic9045.BveEx.ExtendedTrainScheduler
 {
     [Plugin(PluginType.Extension)]
     public class PluginMain : AssemblyPluginBase, IExtension
@@ -46,24 +46,24 @@ namespace Automatic9045.AtsEx.ExtendedTrainScheduler
                 if (!AreOperatorsInitialized)
                 {
                     StatementSet statements = StatementSet.Load(Extensions.GetExtension<IStatementSet>());
-                    WrappedSortedList<string, TrainInfo> trainInfos = instance.Route.TrainInfos;
+                    WrappedSortedList<string, TrainInfo> trainInfos = instance.Map.TrainInfos;
 
                     TrackOperator = TrackOperator.Create(statements.SetTrack, trainInfos, ThrowError);
                     PreTrainOperator = PreTrainOperator.Create(statements.AttachToTrain, statements.Detach, trainInfos, ThrowError);
-                    SpeedOperator = SpeedOperator.Create(statements.StopUntil, BveHacker.MapLoader.Route.TrainInfos, ThrowError);
-                    SpeedOverrider.Override(statements.AccelerateFromHere, statements.AccelerateToHere, BveHacker.MapLoader.Route.TrainInfos, ThrowError);
+                    SpeedOperator = SpeedOperator.Create(statements.StopUntil, BveHacker.MapLoader.Map.TrainInfos, ThrowError);
+                    SpeedOverrider.Override(statements.AccelerateFromHere, statements.AccelerateToHere, BveHacker.MapLoader.Map.TrainInfos, ThrowError);
 
                     AreOperatorsInitialized = true;
 
 
                     void ThrowError(string message, string senderName, int lineIndex, int charIndex)
                     {
-                        BveHacker.LoadErrorManager.Throw(message, senderName ?? Name, lineIndex, charIndex);
+                        BveHacker.LoadingProgressForm.ThrowError(message, senderName ?? Name, lineIndex, charIndex);
                         Application.DoEvents();
                     }
                 }
 
-                IEnumerable<TrainSchedule> stopSchedules = SpeedOperator.CompileToSchedules(instance.TrainInfo, ((Station)instance.Route.Stations[0]).DefaultTime);
+                IEnumerable<TrainSchedule> stopSchedules = SpeedOperator.CompileToSchedules(instance.TrainInfo, ((Station)instance.Map.Stations[0]).DefaultTime);
                 foreach (TrainSchedule schedule in stopSchedules)
                 {
                     instance.Schedules.Add(schedule);
@@ -102,14 +102,12 @@ namespace Automatic9045.AtsEx.ExtendedTrainScheduler
             PreTrainOperator = null;
         }
 
-        public override TickResult Tick(TimeSpan elapsed)
+        public override void Tick(TimeSpan elapsed)
         {
-            if (!AreOperatorsInitialized) return new ExtensionTickResult();
+            if (!AreOperatorsInitialized) return;
 
             WrappedSortedList<string, Train> trains = BveHacker.Scenario.Trains;
             TrackOperator.Tick(trains);
-
-            return new ExtensionTickResult();
         }
     }
 }

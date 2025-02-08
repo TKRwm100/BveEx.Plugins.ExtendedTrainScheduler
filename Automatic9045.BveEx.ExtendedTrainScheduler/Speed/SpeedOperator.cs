@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 using BveTypes.ClassWrappers;
 
-using AtsEx.Extensions.MapStatements;
+using BveEx.Extensions.MapStatements;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler.Speed
+namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
 {
     internal class SpeedOperator
     {

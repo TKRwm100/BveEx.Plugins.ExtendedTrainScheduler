@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 using BveTypes.ClassWrappers;
 
-using AtsEx.Extensions.MapStatements;
+using BveEx.Extensions.MapStatements;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler.PreTrains
+namespace Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains
 {
     internal class PreTrainSchedule : ScheduleBase<string>
     {

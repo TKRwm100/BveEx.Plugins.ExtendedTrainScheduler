@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using AtsEx.Extensions.MapStatements;
+using BveEx.Extensions.MapStatements;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler.PreTrains
+namespace Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains
 {
     internal struct PreTrainStatement : IComparable<PreTrainStatement>
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using AtsEx.Extensions.MapStatements;
+using BveEx.Extensions.MapStatements;
 
-namespace Automatic9045.AtsEx.ExtendedTrainScheduler.Tracks
+namespace Automatic9045.BveEx.ExtendedTrainScheduler.Tracks
 {
     internal class TrackSchedule : ScheduleBase<string>
     {

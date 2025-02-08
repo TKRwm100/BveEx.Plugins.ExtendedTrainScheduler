@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatic9045.AtsEx.ExtendedTrainScheduler", "Automatic9045.AtsEx.ExtendedTrainScheduler\Automatic9045.AtsEx.ExtendedTrainScheduler.csproj", "{580F321C-9D40-4BA3-A7CE-13B62C376949}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatic9045.BveEx.ExtendedTrainScheduler", "Automatic9045.BveEx.ExtendedTrainScheduler\Automatic9045.BveEx.ExtendedTrainScheduler.csproj", "{580F321C-9D40-4BA3-A7CE-13B62C376949}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
