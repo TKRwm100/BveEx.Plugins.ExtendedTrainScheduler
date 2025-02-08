@@ -23,8 +23,8 @@ using Automatic9045.BveEx.ExtendedTrainScheduler.Tracks;
 
 namespace Automatic9045.BveEx.ExtendedTrainScheduler
 {
-    [Plugin(PluginType.Extension)]
-    public class PluginMain : AssemblyPluginBase, IExtension
+    [Plugin(PluginType.MapPlugin)]
+    public class PluginMain : AssemblyPluginBase
     {
         private readonly HarmonyPatch HarmonyPatch;
 
