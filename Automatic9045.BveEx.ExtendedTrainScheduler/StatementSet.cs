@@ -11,6 +11,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
     internal class StatementSet
     {
         private static readonly string UserName = "Automatic9045";
+        private static readonly string AdditionalUserName = "Toukaitetudou";
 
         private static readonly ClauseFilter Root = ClauseFilter.Element(nameof(ExtendedTrainScheduler), 0);
         private static readonly ClauseFilter Train = ClauseFilter.Element("Train", 1);
@@ -48,10 +49,10 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
             IEnumerable<Statement> setTrack = source.FindUserStatements(UserName, Root, Train, ClauseFilter.Function("SetTrack", 1));
             IEnumerable<Statement> accelerateFromHere = source.FindUserStatements(UserName, Root, Train, Accelerate, ClauseFilter.Function("FromHere", 2));
             IEnumerable<Statement> accelerateToHere = source.FindUserStatements(UserName, Root, Train, Accelerate, ClauseFilter.Function("ToHere", 2));
-            IEnumerable<Statement> accelerateToHereAt = source.FindUserStatements(UserName, Root, Train, Accelerate, ClauseFilter.Function("ToHereAt", 2));
+            IEnumerable<Statement> accelerateToHereAt = source.FindUserStatements(AdditionalUserName, Root, Train, Accelerate, ClauseFilter.Function("ToHereAt", 2));
             IEnumerable<Statement> stopUntil = source.FindUserStatements(UserName, Root, Train, ClauseFilter.Function("StopUntil", 4));
-            IEnumerable<Statement> stopAtUntil = source.FindUserStatements(UserName, Root, Train, ClauseFilter.Function("StopAtUntil", 4));
-            IEnumerable<Statement> stopAt = source.FindUserStatements(UserName, Root, Train, ClauseFilter.Function("StopAt", 4));
+            IEnumerable<Statement> stopAtUntil = source.FindUserStatements(AdditionalUserName, Root, Train, ClauseFilter.Function("StopAtUntil", 4));
+            IEnumerable<Statement> stopAt = source.FindUserStatements(AdditionalUserName, Root, Train, ClauseFilter.Function("StopAt", 4));
             IEnumerable<Statement> attachToTrain = source.FindUserStatements(UserName, Root, PreTrain, ClauseFilter.Function("AttachToTrain", 1));
             IEnumerable<Statement> detach = source.FindUserStatements(UserName, Root, PreTrain, ClauseFilter.Function("Detach", 0));
 
