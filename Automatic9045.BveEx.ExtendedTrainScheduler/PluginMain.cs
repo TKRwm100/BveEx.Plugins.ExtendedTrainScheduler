@@ -73,7 +73,6 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
             };
 
             BveHacker.ScenarioCreated += OnScenarioCreated;
-            BveHacker.ScenarioClosed += OnScenarioClosed;
         }
 
         public override void Dispose()
@@ -81,31 +80,18 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
             HarmonyPatch.Dispose();
             PreTrainPatch?.Dispose();
             BveHacker.ScenarioCreated -= OnScenarioCreated;
-            BveHacker.ScenarioClosed -= OnScenarioClosed;
         }
 
         private void OnScenarioCreated(ScenarioCreatedEventArgs e)
         {
-            if (!AreOperatorsInitialized) return;
-
             PreTrainOperator.SectionManager = e.Scenario.SectionManager;
             PreTrainOperator.Trains = e.Scenario.Trains;
 
             PreTrainPatch = Extensions.GetExtension<IPreTrainPatchFactory>().Patch(nameof(ExtendedTrainScheduler), e.Scenario.SectionManager, PreTrainOperator);
         }
 
-        private void OnScenarioClosed(EventArgs e)
-        {
-            AreOperatorsInitialized = false;
-
-            TrackOperator = null;
-            PreTrainOperator = null;
-        }
-
         public override void Tick(TimeSpan elapsed)
         {
-            if (!AreOperatorsInitialized) return;
-
             WrappedSortedList<string, Train> trains = BveHacker.Scenario.Trains;
             TrackOperator.Tick(trains);
         }
