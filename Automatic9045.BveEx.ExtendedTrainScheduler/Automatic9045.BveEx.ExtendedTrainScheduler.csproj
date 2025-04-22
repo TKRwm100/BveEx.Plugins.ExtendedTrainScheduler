@@ -81,6 +81,7 @@
     <Compile Include="CompatibleTimeSpanFactory.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="PluginMain.cs" />
+    <Compile Include="PreTrains\PreTrain.cs" />
     <Compile Include="PreTrains\PreTrainOperator.cs" />
     <Compile Include="PreTrains\PreTrainSchedule.cs" />
     <Compile Include="PreTrains\PreTrainStatement.cs" />

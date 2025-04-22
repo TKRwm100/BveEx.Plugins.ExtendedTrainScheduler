@@ -42,7 +42,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
             IEnumerable<Statement> accelerateFromHere = source.FindUserStatements(UserName, Root, Train, Accelerate, ClauseFilter.Function("FromHere", 2));
             IEnumerable<Statement> accelerateToHere = source.FindUserStatements(UserName, Root, Train, Accelerate, ClauseFilter.Function("ToHere", 2));
             IEnumerable<Statement> stopUntil = source.FindUserStatements(UserName, Root, Train, ClauseFilter.Function("StopUntil", 4));
-            IEnumerable<Statement> attachToTrain = source.FindUserStatements(UserName, Root, PreTrain, ClauseFilter.Function("AttachToTrain", 1));
+            IEnumerable<Statement> attachToTrain = source.FindUserStatements(UserName, Root, PreTrain, ClauseFilter.Function("AttachToTrain", 1, 2));
             IEnumerable<Statement> detach = source.FindUserStatements(UserName, Root, PreTrain, ClauseFilter.Function("Detach", 0));
 
             return new StatementSet(setTrack, accelerateFromHere, accelerateToHere, stopUntil, attachToTrain, detach);
