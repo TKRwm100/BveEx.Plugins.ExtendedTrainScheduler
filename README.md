@@ -1,7 +1,7 @@
 # BveEx.Plugins.ExtendedTrainScheduler
 【BVE/BveEX】他列車の走行スケジュールをより細かく設定できるようにするプラグインです。
 
-詳しくは [BveEX 公式ホームページ](https://www.okaoka-depot.com/AtsEX.Docs/plugins/extended-train-scheduler/) をご覧ください。
+詳しくは [BveEX 公式ホームページ](https://bveex.okaoka-depot.com/plugins/extended-train-scheduler) をご覧ください。
 
 ## ライセンス
 
