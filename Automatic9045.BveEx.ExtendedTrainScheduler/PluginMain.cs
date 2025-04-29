@@ -53,7 +53,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
                     TrackOperator = TrackOperator.Create(statements.SetTrack, trainInfos, ThrowError);
                     PreTrainOperator = PreTrainOperator.Create(statements.AttachToTrain, statements.Detach, trainInfos, ThrowError);
                     SpeedOperator = SpeedOperator.Create(statements.StopUntil,statements.StopAtUntil, statements.StopAt, statements.AccelerateToHereAt,BveHacker.MapLoader.Map.TrainInfos, ThrowError);
-                    SpeedOverrider.Override(statements.AccelerateFromHere, statements.AccelerateToHere, BveHacker.MapLoader.Map.TrainInfos, ThrowError, ((Station)instance.Map.Stations[0]).DefaultTime);
+                    SpeedOverrider.Override(statements.AccelerateFromHere, statements.AccelerateToHere, BveHacker.MapLoader.Map.TrainInfos, ThrowError, ((Station)instance.Map.Stations.FirstOrDefault())?.DefaultTime??new TimeSpan());
 
                     AreOperatorsInitialized = true;
 
