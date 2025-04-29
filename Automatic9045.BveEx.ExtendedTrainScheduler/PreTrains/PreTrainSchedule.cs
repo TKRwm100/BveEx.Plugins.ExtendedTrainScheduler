@@ -10,15 +10,15 @@ using BveEx.Extensions.MapStatements;
 
 namespace Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains
 {
-    internal class PreTrainSchedule : ScheduleBase<string>
+    internal class PreTrainSchedule : ScheduleBase<PreTrain>
     {
-        private PreTrainSchedule(IReadOnlyList<Node<string>> nodes) : base(nodes)
+        private PreTrainSchedule(IReadOnlyList<Node<PreTrain>> nodes) : base(nodes)
         {
         }
 
         public static PreTrainSchedule FromStatements(IEnumerable<PreTrainStatement> statements, IReadOnlyDictionary<string, TrainInfo> trainInfos, Validator validator)
         {
-            List<Node<string>> nodes = statements
+            List<Node<PreTrain>> nodes = statements
                 .Select(statement =>
                 {
                     MapStatement statementSource = statement.Statement.Source;
@@ -31,10 +31,12 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains
                         case StatementType.Attach:
                             validator.CheckFirstArgIsNotNull(statementSource, 5);
                             string trainKey = validator.GetTrain(statementSource.Clauses[5].Args[0].ToString(), statementSource, trainInfos).Key;
-                            return new Node<string>(location, trainKey);
+                            double offset = 2 <= statementSource.Clauses[5].Args.Count ? Convert.ToDouble(statementSource.Clauses[5].Args[1]) : 0;
+                            PreTrain item = new PreTrain(trainKey, offset);
+                            return new Node<PreTrain>(location, item);
 
                         case StatementType.Detach:
-                            return new Node<string>(location, null);
+                            return new Node<PreTrain>(location, null);
 
                         default:
                             throw new NotSupportedException();

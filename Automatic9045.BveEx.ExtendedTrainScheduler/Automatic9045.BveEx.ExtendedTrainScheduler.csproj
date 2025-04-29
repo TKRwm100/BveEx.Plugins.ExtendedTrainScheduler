@@ -35,21 +35,25 @@
       <HintPath>..\packages\Lib.Harmony.2.3.5\lib\net48\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="BveEx.CoreExtensions, Version=2.0.41222.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BveEx.CoreExtensions.2.0.0\lib\BveEx.CoreExtensions.dll</HintPath>
+    <Reference Include="BveEx.CoreExtensions, Version=2.0.50427.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BveEx.CoreExtensions.2.0.8\lib\BveEx.CoreExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BveEx.PluginHost, Version=2.0.50204.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BveEx.PluginHost.2.0.5.1\lib\BveEx.PluginHost.dll</HintPath>
+      <HintPath>..\packages\BveEx.PluginHost.2.0.8\lib\BveEx.PluginHost.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="BveTypes, Version=2.0.50204.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BveEx.PluginHost.2.0.5.1\lib\BveTypes.dll</HintPath>
+    <Reference Include="BveTypes, Version=2.0.50428.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BveEx.PluginHost.2.0.8\lib\BveTypes.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FastCaching, Version=2.0.41222.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BveEx.PluginHost.2.0.5.1\lib\FastCaching.dll</HintPath>
+      <HintPath>..\packages\BveEx.PluginHost.2.0.8\lib\FastCaching.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FastMember, Version=2.0.41222.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BveEx.PluginHost.2.0.5.1\lib\FastMember.dll</HintPath>
+      <HintPath>..\packages\BveEx.PluginHost.2.0.8\lib\FastMember.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ObjectiveHarmonyPatch, Version=1.2.50130.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectiveHarmonyPatch.1.2.0\lib\ObjectiveHarmonyPatch.dll</HintPath>
@@ -68,14 +72,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TypeWrapping, Version=2.0.50204.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BveEx.PluginHost.2.0.5.1\lib\TypeWrapping.dll</HintPath>
+    <Reference Include="TypeWrapping, Version=2.0.50314.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BveEx.PluginHost.2.0.8\lib\TypeWrapping.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompatibleTimeSpanFactory.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="PluginMain.cs" />
+    <Compile Include="PreTrains\PreTrain.cs" />
     <Compile Include="PreTrains\PreTrainOperator.cs" />
     <Compile Include="PreTrains\PreTrainSchedule.cs" />
     <Compile Include="PreTrains\PreTrainStatement.cs" />

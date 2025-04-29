@@ -12,19 +12,18 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
 {
     internal static class SpeedOverrider
     {
-        internal static readonly double StepSpeed = 1 / 3.6; // 1 [km/h]
+        private static readonly double StepSpeed = 1 / 3.6; // 1 [km/h]
 
         public static void Override(IEnumerable<Statement> accelerateFromHereStatements, IEnumerable<Statement> accelerateToHereStatements,
-            IReadOnlyDictionary<string, TrainInfo> trainInfos, Action<string, string, int, int> onError,TimeSpan originTimes)
+            IReadOnlyDictionary<string, TrainInfo> trainInfos, Action<string, string, int, int> onError)
         {
             Validator validator = new Validator(onError);
 
             List<StatementWithTrainInfo> forwardTrainStatements = new List<StatementWithTrainInfo>();
             List<StatementWithTrainInfo> backwardTrainStatements = new List<StatementWithTrainInfo>();
 
-            LoadStatements(accelerateFromHereStatements, StateType.FromHere);
-            LoadStatements(accelerateToHereStatements, StateType.ToHere);
-            //LoadStatements(accelerateToHereAtStatements, StateType.ToHereAt);
+            LoadStatements(accelerateFromHereStatements, false);
+            LoadStatements(accelerateToHereStatements, true);
             forwardTrainStatements.Sort();
             backwardTrainStatements.Sort();
 
@@ -39,7 +38,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
             }
 
 
-            void LoadStatements(IEnumerable<Statement> statements, StateType stateType)
+            void LoadStatements(IEnumerable<Statement> statements, bool accelerateToHere)
             {
                 foreach (Statement statement in statements)
                 {
@@ -49,7 +48,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
                     (string trainKey, TrainInfo trainInfo) = validator.GetTrain(statementSource, trainInfos);
                     if (trainKey is null) continue;
 
-                    StatementWithTrainInfo item = new StatementWithTrainInfo(statement, trainInfo, stateType);
+                    StatementWithTrainInfo item = new StatementWithTrainInfo(statement, trainInfo, accelerateToHere);
                     switch (trainInfo.Direction)
                     {
                         case 1:
@@ -88,22 +87,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
 
                 double initialSpeed = prevStop.Speed;
                 double targetSpeed = Convert.ToDouble(statementSource.Clauses[6].Args[0]) / 3.6;
-
-                double acceleration = 0;
-                switch (statement.StateType)
-                {
-                    case StateType.FromHere:
-                    case StateType.ToHere:
-                        {
-                            acceleration= Convert.ToDouble(statementSource.Clauses[6].Args[1]) / 3.6;
-                            break;
-                        }
-                    case StateType.ToHereAt:
-                        {
-                            TimeSpan time= originTimes+prevStop.StopTime;
-                            break;
-                        }
-                }
+                double acceleration = Convert.ToDouble(statementSource.Clauses[6].Args[1]) / 3.6;
 
                 firstStop.Speed = initialSpeed;
                 if (targetSpeed == initialSpeed) return;
@@ -114,7 +98,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
                 if (Math.Sign(acceleration) != sign) acceleration = double.MaxValue * sign;
 
                 double accelerateDistance = (targetSpeed - initialSpeed) * (targetSpeed + initialSpeed) / 2 / acceleration * direction;
-                if (statement.StateType==StateType.ToHere||statement.StateType==StateType.ToHereAt)
+                if (statement.AccelerateToHere)
                 {
                     initialLocation -= accelerateDistance;
                     firstStop.Location = initialLocation;
@@ -147,24 +131,18 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.Speed
             }
         }
 
-        enum StateType
-        {
-            FromHere,
-            ToHere,
-            ToHereAt
-        }
 
         private struct StatementWithTrainInfo : IComparable<StatementWithTrainInfo>
         {
             public Statement Statement { get; }
             public TrainInfo TrainInfo { get; }
-            public StateType StateType { get; }
+            public bool AccelerateToHere { get; }
 
-            public StatementWithTrainInfo(Statement statement, TrainInfo trainInfo, StateType stateType)
+            public StatementWithTrainInfo(Statement statement, TrainInfo trainInfo, bool accelerateToHere)
             {
                 Statement = statement;
                 TrainInfo = trainInfo;
-                StateType = stateType;
+                AccelerateToHere = accelerateToHere;
             }
 
             public int CompareTo(StatementWithTrainInfo other)
