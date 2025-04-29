@@ -20,7 +20,7 @@
 減速し、時刻 t1 にその距離程に停車します。st [s] 経過すると発車し、加速度 a [km/h/s] で速度 v [km/h] まで加速します。
 時刻 t の指定方法はBVE標準のTrain.Enable構文と同様です。時刻を表す文字列 'hh:mm:ss' または 00:00:00 からの経過時間 [s] で指定してください。
 
-従来の他列車走行スケジュール拡張プラグインについては [BveEX 公式ホームページ](https://www.okaoka-depot.com/AtsEX.Docs/plugins/extended-train-scheduler/) 等をご覧ください。
+従来の他列車走行スケジュール拡張プラグインについては [BveEX 公式ホームページ](https://bveex.okaoka-depot.com/plugins/extended-train-scheduler) 等をご覧ください。
 
 ## ライセンス
 
