@@ -9,13 +9,13 @@ using BveTypes.ClassWrappers;
 using BveTypes.ClassWrappers.Extensions;
 using FastMember;
 using ObjectiveHarmonyPatch;
-using SlimDX;
 using TypeWrapping;
 
 using BveEx.Extensions.MapStatements;
 using BveEx.Extensions.PreTrainPatch;
 using BveEx.PluginHost;
 using BveEx.PluginHost.Plugins;
+using BveEx.PluginHost.Plugins.Extensions;
 
 using Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains;
 using Automatic9045.BveEx.ExtendedTrainScheduler.Speed;
@@ -26,8 +26,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
     [Plugin(PluginType.MapPlugin)]
     public class PluginMain : AssemblyPluginBase
     {
-        private readonly HarmonyPatch CompileToSchedulesPatch;
-        private readonly HarmonyPatch DrawCarsPatch;
+        private readonly HarmonyPatch HarmonyPatch;
 
         private bool AreOperatorsInitialized = false;
         private TrackOperator TrackOperator;
@@ -38,10 +37,9 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
         public PluginMain(PluginBuilder builder) : base(builder)
         {
             ClassMemberSet trainMembers = BveHacker.BveTypes.GetClassInfoOf<Train>();
-
             FastMethod compileToSchedulesMethod = trainMembers.GetSourceMethodOf(nameof(Train.CompileToSchedules));
-            CompileToSchedulesPatch = HarmonyPatch.Patch(nameof(ExtendedTrainScheduler), compileToSchedulesMethod.Source, PatchType.Prefix);
-            CompileToSchedulesPatch.Invoked += (sender, e) =>
+            HarmonyPatch = HarmonyPatch.Patch(nameof(ExtendedTrainScheduler), compileToSchedulesMethod.Source, PatchType.Prefix);
+            HarmonyPatch.Invoked += (sender, e) =>
             {
                 Train instance = Train.FromSource(e.Instance);
 
@@ -52,8 +50,8 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
 
                     TrackOperator = TrackOperator.Create(statements.SetTrack, trainInfos, ThrowError);
                     PreTrainOperator = PreTrainOperator.Create(statements.AttachToTrain, statements.Detach, trainInfos, ThrowError);
-                    SpeedOperator = SpeedOperator.Create(statements.StopUntil, BveHacker.MapLoader.Map.TrainInfos, ThrowError);
-                    SpeedOverrider.Override(statements.AccelerateFromHere, statements.AccelerateToHere, BveHacker.MapLoader.Map.TrainInfos, ThrowError);
+                    SpeedOperator = SpeedOperator.Create(statements.StopUntil,statements.StopAtUntil, statements.StopAt, statements.AccelerateToHereAt,BveHacker.MapLoader.Map.TrainInfos, ThrowError);
+                    SpeedOverrider.Override(statements.AccelerateFromHere, statements.AccelerateToHere, BveHacker.MapLoader.Map.TrainInfos, ThrowError, ((Station)instance.Map.Stations[0]).DefaultTime);
 
                     AreOperatorsInitialized = true;
 
@@ -65,8 +63,7 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
                     }
                 }
 
-                TimeSpan originTime = 0 < instance.Map.Stations.Count ? ((Station)instance.Map.Stations[0]).DefaultTime : TimeSpan.Zero;
-                IEnumerable<TrainSchedule> stopSchedules = SpeedOperator.CompileToSchedules(instance.TrainInfo, originTime);
+                IEnumerable<TrainSchedule> stopSchedules = SpeedOperator.CompileToSchedules(instance.TrainInfo, ((Station)instance.Map.Stations[0]).DefaultTime);
                 foreach (TrainSchedule schedule in stopSchedules)
                 {
                     instance.Schedules.Add(schedule);
@@ -75,41 +72,42 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
                 return new PatchInvokationResult(SkipModes.SkipPatches | SkipModes.SkipOriginal);
             };
 
-            FastMethod drawCarsMethod = trainMembers.GetSourceMethodOf(nameof(Train.DrawCars));
-            DrawCarsPatch = HarmonyPatch.Patch(nameof(ExtendedTrainScheduler), drawCarsMethod.Source, PatchType.Prefix);
-            DrawCarsPatch.Invoked += (sender, e) =>
-            {
-                Train instance = Train.FromSource(e.Instance);
-                Direct3DProvider direct3DProvider = Direct3DProvider.FromSource(e.Args[0]);
-                Matrix view = (Matrix)e.Args[1];
-
-                bool overrode = TrackOperator.DrawCars(instance, view);
-                return overrode ? new PatchInvokationResult(SkipModes.SkipOriginal) : PatchInvokationResult.DoNothing(e);
-            };
-
             BveHacker.ScenarioCreated += OnScenarioCreated;
+            BveHacker.ScenarioClosed += OnScenarioClosed;
         }
 
         public override void Dispose()
         {
-            CompileToSchedulesPatch.Dispose();
-            DrawCarsPatch.Dispose();
-
+            HarmonyPatch.Dispose();
             PreTrainPatch?.Dispose();
-
             BveHacker.ScenarioCreated -= OnScenarioCreated;
+            BveHacker.ScenarioClosed -= OnScenarioClosed;
         }
 
         private void OnScenarioCreated(ScenarioCreatedEventArgs e)
         {
+            if (!AreOperatorsInitialized) return;
+
             PreTrainOperator.SectionManager = e.Scenario.SectionManager;
             PreTrainOperator.Trains = e.Scenario.Trains;
 
             PreTrainPatch = Extensions.GetExtension<IPreTrainPatchFactory>().Patch(nameof(ExtendedTrainScheduler), e.Scenario.SectionManager, PreTrainOperator);
         }
 
+        private void OnScenarioClosed(EventArgs e)
+        {
+            AreOperatorsInitialized = false;
+
+            TrackOperator = null;
+            PreTrainOperator = null;
+        }
+
         public override void Tick(TimeSpan elapsed)
         {
+            if (!AreOperatorsInitialized) return;
+
+            WrappedSortedList<string, Train> trains = BveHacker.Scenario.Trains;
+            TrackOperator.Tick(trains);
         }
     }
 }

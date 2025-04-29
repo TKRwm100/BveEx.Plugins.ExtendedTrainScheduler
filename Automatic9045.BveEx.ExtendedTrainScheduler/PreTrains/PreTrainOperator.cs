@@ -39,10 +39,10 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler.PreTrains
 
         public PreTrainLocation Convert(PreTrainLocation source)
         {
-            PreTrain item = Schedule.GetValue(source.Location);
-            if (item is null) return source;
+            string trainKey = Schedule.GetValue(source.Location);
+            if (trainKey is null) return source;
 
-            double location = Trains[item.TrainKey].Location + item.Offset;
+            double location = Trains[trainKey].Location;
             return PreTrainLocation.FromLocation(location, SectionManager);
         }
     }

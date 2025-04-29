@@ -37,20 +37,18 @@ namespace Automatic9045.BveEx.ExtendedTrainScheduler
 
         public (string Key, TrainInfo Info) GetTrain(string trainKey, MapStatement statement, IReadOnlyDictionary<string, TrainInfo> trainInfos)
         {
-            string formattedTrainKey = trainKey.ToLowerInvariant();
-
-            if (!trainInfos.TryGetValue(formattedTrainKey, out TrainInfo trainInfo))
+            if (!trainInfos.TryGetValue(trainKey, out TrainInfo trainInfo))
             {
-                ThrowError($"キー '{formattedTrainKey}' の他列車は存在しません。", statement);
+                ThrowError($"キー '{trainKey}' の他列車は存在しません。", statement);
                 return (null, null);
             }
 
-            return (formattedTrainKey, trainInfo);
+            return (trainKey, trainInfo);
         }
 
         public (string Key, TrainInfo Info) GetTrain(MapStatement statement, IReadOnlyDictionary<string, TrainInfo> trainInfos)
         {
-            string trainKey = statement.Clauses[4].Keys[0].ToString();
+            string trainKey = statement.Clauses[4].Keys[0].ToString().ToLowerInvariant();
             return GetTrain(trainKey, statement, trainInfos);
         }
 
