@@ -24,7 +24,7 @@
 
 ## ライセンス
 
-[PolyForm Noncommercial License 1.0.0](LICENSE.md)
+[拡張PolyForm準拠ライセンス](LICENSE.md)
 
 ## 改造元プラグイン
 
